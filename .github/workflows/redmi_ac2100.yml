@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build Redmi AC2100 OpenWrt
+name: 名称：Build Redmi AC2100OpenWrt
 
 on:
   repository_dispatch:
@@ -20,30 +20,30 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
-  FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: config/MIPS/redmi_ac2100.config
-  DIY_P1_SH: scripts/diy-part1.sh
-  DIY_P2_SH: scripts/diy-part2.sh
+  REPO_URL: repo URL(_U)：https://github.com/coolsnowwolf/lede://github.com/coolsnowwolf/lede
+  REPO_BRANCH: repo_BRANCH:master
+  FEEDS_CONF: feeds_CONF:feeds.conf.default
+  CONFIG_FILE: config_FILE:config/MIPS/redmi_ac2100.config
+  DIY_P1_SH: DIY_P1_SH:scripts/diy-part1.sh
+  DIY_P2_SH: DIY_P2_SH:scripts/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: true
   UPLOAD_RELEASE: false
-  TZ: Asia/Shanghai
+  TZ: TZ：亚洲/上海
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: run-on:ubuntu-18.04
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@main
+    - name: -名称：结帐
+      uses: 用途：操作/签出@main
 
-    - name: Initialization environment
+    - name: -名称：初始化环境
       env:
-        DEBIAN_FRONTEND: noninteractive
+        DEBIAN_FRONTEND: Debian_FRONTEND：非交互式
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
@@ -54,14 +54,14 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
 
-    - name: Clone source code
-      working-directory: /workdir
+    - name: -名称：克隆源代码
+      working-directory: 工作目录：/workdir
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-    - name: Load custom feeds
+    - name: -名称：加载自定义摘要
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
         chmod +x $DIY_P1_SH
@@ -129,6 +129,49 @@ jobs:
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
+
+name: Build Redmi AC2100 OpenWrt
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: config/MIPS/redmi_ac2100.config
+  DIY_P1_SH: scripts/diy-part1.sh
+  DIY_P2_SH: scripts/diy-part2.sh
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: true
+  UPLOAD_WETRANSFER: true
+  UPLOAD_RELEASE: false
+  TZ: Asia/Shanghai
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@main
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/*
+        sudo add-apt-repository ppa:openjdk-r/ppa -y
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
+        sudo apt-get -qq install open
 
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
